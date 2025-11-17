@@ -1,20 +1,19 @@
 #!/bin/bash
 
-# Wait for PostgreSQL to be ready
-echo "Waiting for PostgreSQL to be ready..."
-while ! PGPASSWORD=$PGPASSWORD pg_isready -h $PGHOST -p $PGPORT -U $PGUSER; do
-    sleep 1
+echo "Waiting for PostgreSQL..."
+until PGPASSWORD="$PGPASSWORD" psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -c '\q'; do
+  sleep 1
 done
 
-echo "PostgreSQL is ready! Starting Odoo..."
+echo "PostgreSQL is ready!"
 
-# Start Odoo with Railway database configuration
+# Start Odoo with command line parameters
 exec python3 /usr/bin/odoo \
-    --database $PGDATABASE \
-    --db_host $PGHOST \
-    --db_port $PGPORT \
-    --db_user $PGUSER \
-    --db_password $PGPASSWORD \
-    --without-demo=all \
-    --load=base,web \
-    --stop-after-init
+    --config=/etc/odoo/odoo.conf \
+    --database="$PGDATABASE" \
+    --db_host="$PGHOST" \
+    --db_port="$PGPORT" \
+    --db_user="$PGUSER" \
+    --db_password="$PGPASSWORD" \
+    --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons \
+    --data-dir=/var/lib/odoo
