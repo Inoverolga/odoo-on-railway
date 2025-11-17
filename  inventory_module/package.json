@@ -1,0 +1,7 @@
+{
+  "name": "odoo-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "python3 /usr/bin/odoo --without-demo=all"
+  }
+}
