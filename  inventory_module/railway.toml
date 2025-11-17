@@ -1,0 +1,5 @@
+[build]
+builder = "DOCKERFILE"
+
+[deploy]
+startCommand = "python3 /usr/bin/odoo --without-demo=all"
