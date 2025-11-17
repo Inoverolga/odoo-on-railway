@@ -1,1 +1,0 @@
-echo "from . import models" > inventory_module/__init__.py
